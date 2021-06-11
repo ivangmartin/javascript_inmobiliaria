@@ -29,7 +29,7 @@ let property = {
   email: '',
   phone: '',
   price: '',
-  saleTypes: [],
+  saleTypeIds: [],
   address: '',
   city: '',
   province: '',
@@ -38,7 +38,7 @@ let property = {
   squareMeter: '',
   locationUrl: '',
   mainFeatures: [],
-  equipments: [],
+  equipmentIds: [],
   images: [],
 };
 
@@ -212,22 +212,26 @@ onAddFile('add-image', (image) => {
 onSubmitForm('save-button', () => {
   formValidation.validateForm(property).then((result) => {
     onSetFormErrors(result);
-    console.log(property);
     if (result.succeeded) {
-      insertProperty(mapPropertyFromViewModelToApi(property));
-      history.back();
+      insertProperty(
+        mapPropertyFromViewModelToApi(property).then((property) => {
+          history.back();
+        })
+      );
     }
   });
 });
 
 onUpdateField('saleTypes', (event) => {
   const value = event.target.value;
-  property.saleTypes.includes(value)
-    ? (property.saleTypes = property.saleTypes.filter((type) => type !== value))
-    : property.saleTypes.push(value);
+  property.saleTypeIds.includes(value)
+    ? (property.saleTypeIds = property.saleTypeIds.filter(
+        (type) => type !== value
+      ))
+    : property.saleTypeIds.push(value);
 
   formValidation
-    .validateField('saleTypes', property.saleTypes)
+    .validateField('saleTypes', property.saleTypeIds)
     .then((result) => {
       onSetError('saleTypes', result);
     });
@@ -235,11 +239,11 @@ onUpdateField('saleTypes', (event) => {
 
 onUpdateField('equipments', (event) => {
   const value = event.target.value;
-  property.equipments.includes(value)
-    ? (property.equipments = property.equipments.filter(
+  property.equipmentIds.includes(value)
+    ? (property.equipmentIds = property.equipmentIds.filter(
         (type) => type !== value
       ))
-    : property.equipments.push(value);
+    : property.equipmentIds.push(value);
 });
 
 Promise.all([
@@ -247,9 +251,9 @@ Promise.all([
   getEquipments(),
   getProvinces(),
   getPropertyList(),
-]).then(([saleTypes, equipments, provinces, propertyList]) => {
-  setCheckboxList(saleTypes, 'saleTypes');
-  setCheckboxList(equipments, 'equipments');
+]).then(([saleTypeIds, equipmentIds, provinces, propertyList]) => {
+  setCheckboxList(saleTypeIds, 'saleTypes');
+  setCheckboxList(equipmentIds, 'equipments');
   setOptionList(provinces, 'province');
 
   /****** ME ASEGURO DE QUE DA IDS DE FORMA ORDENADA */
