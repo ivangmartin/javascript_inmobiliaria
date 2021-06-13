@@ -213,11 +213,9 @@ onSubmitForm('save-button', () => {
   formValidation.validateForm(property).then((result) => {
     onSetFormErrors(result);
     if (result.succeeded) {
-      insertProperty(
-        mapPropertyFromViewModelToApi(property).then((property) => {
-          history.back();
-        })
-      );
+      insertProperty(mapPropertyFromViewModelToApi(property)).then(() => {
+        history.back();
+      });
     }
   });
 });
