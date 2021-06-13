@@ -84,6 +84,10 @@ const validationSchema = {
     ],
     saleTypes: [
       {
+        validator: Validators.required,
+        message: 'Alguna opción obligatoria',
+      },
+      {
         validator: arrayRequired,
         message: 'Alguna opción obligatoria',
       },
