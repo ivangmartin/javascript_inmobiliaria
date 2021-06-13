@@ -26,6 +26,6 @@ export const getPropertyList = () =>
   });
 
 export const insertProperty = (property) =>
-  Axios.post(`${propertytUrl}/${property.id}`, property).then((response) => {
+  Axios.post(`${propertytUrl}`, property).then((response) => {
     return response.data;
   });
